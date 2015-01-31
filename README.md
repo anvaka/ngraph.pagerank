@@ -1,7 +1,7 @@
 # ngraph.pagerank [![Build Status](https://travis-ci.org/anvaka/ngraph.pagerank.svg)](https://travis-ci.org/anvaka/ngraph.pagerank)
 
-PageRank calculation in JavaScript. This module is part of [ngraph](https://github.com/anvaka/ngraph)
-family.
+PageRank algorithm implementation in JavaScript. This module is part of
+[ngraph](https://github.com/anvaka/ngraph) family.
 
 # usage
 
@@ -19,8 +19,8 @@ This code will compute PageRank for two nodes:
 
 ``` json
 {
-  '1': 0.350877,
-  '2': 0.649123
+  "1": 0.350877,
+  "2": 0.649123
 }
 ```
 
