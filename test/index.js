@@ -17,15 +17,15 @@ test('it calculates page rank', function(t) {
     '}'].join('\n'));
 
   var internalJumpProbability = 0.85;
-  var rank = pagerank(graph, internalJumpProbability);
+  var rank = pagerank(graph, internalJumpProbability, 0.0001);
 
   // now just verify that probabilities match precomupted probabilities of the wiki:
   verify('a', 0.033);
-  verify('b', 0.385);
+  verify('b', 0.384);
   verify('c', 0.343);
   verify('d', 0.039);
   verify('e', 0.081);
-  verify('f', 0.033);
+  verify('f', 0.039);
   verify('g', 0.016);
   verify('h', 0.016);
   verify('i', 0.016);
@@ -33,6 +33,6 @@ test('it calculates page rank', function(t) {
   t.end();
 
   function verify(node, expected) {
-    t.equals(rank[node], expected, 'Node ' + node + ' has expected rank ' + expected);
+    t.equals(rank[node].toFixed(3), expected.toString(), 'Node ' + node + ' has expected rank ' + expected);
   }
 });

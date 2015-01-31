@@ -17,10 +17,8 @@
     "type": "git",
     "url": "https://github.com/anvaka/ngraph.pagerank"
   },
-  "dependencies": {
-    "tap": "^0.5.0"
-  },
   "devDependencies": {
-    "ngraph.fromdot": "^0.1.0"
+    "ngraph.fromdot": "^0.1.0",
+    "tap": "^0.5.0"
   }
 }
