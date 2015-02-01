@@ -57,6 +57,12 @@ var rank = pagerank(graph, internalJumpProbability, precision);
 
 Here `r(t)` is eigenvector (or pagerank of a graph) at time step `t`.
 
+# demo
+
+A small demo is available [here](https://anvaka.github.io/ngraph.pagerank/demo/).
+It computes PageRank for [a graph from Wikipedia](https://en.wikipedia.org/wiki/PageRank#mediaviewer/File:PageRanks-Example.svg)
+and then renders it with force based layout.
+
 # install
 
 With [npm](https://npmjs.org) do:
