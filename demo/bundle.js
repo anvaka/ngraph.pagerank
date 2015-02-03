@@ -1,4 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/**
+ * This example takes graph from wikipedia:
+ * https://en.wikipedia.org/wiki/PageRank#mediaviewer/File:PageRanks-Example.svg
+ * and computes page rank for it. Afterwards it renders it on the page with
+ * force based layout
+ */
 var dot = require('ngraph.fromdot');
 var render = require('ngraph.svg');
 var arrow = require('s.arrow');
@@ -167,9 +173,10 @@ function initializeNodes(graph) {
     function initLink(otherNode, link) {
       if (link.fromId === node.id) {
         outDegree += 1;
-      } else {
+      }
+      if (link.toId === node.id) {
         inDegree += 1;
-        // TODO: this needs to be configurable
+        // TODO: this needs to be configurable. E.g. use outdegree
         neighbors.push(nodes[idToNumber[otherNode.id]]);
       }
     }
@@ -3397,7 +3404,10 @@ function createGraph() {
 
     // TODO: this is not cool. On large graphs potentially would consume more memory.
     fromNode.links.push(link);
-    toNode.links.push(link);
+    if (fromId !== toId) {
+      // make sure we are not duplicating links for self-loops
+      toNode.links.push(link);
+    }
 
     recordLinkChange(link, 'add');
 

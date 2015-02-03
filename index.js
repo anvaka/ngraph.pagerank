@@ -93,9 +93,10 @@ function initializeNodes(graph) {
     function initLink(otherNode, link) {
       if (link.fromId === node.id) {
         outDegree += 1;
-      } else {
+      }
+      if (link.toId === node.id) {
         inDegree += 1;
-        // TODO: this needs to be configurable
+        // TODO: this needs to be configurable. E.g. use outdegree
         neighbors.push(nodes[idToNumber[otherNode.id]]);
       }
     }

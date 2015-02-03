@@ -19,8 +19,8 @@
     "url": "https://github.com/anvaka/ngraph.pagerank"
   },
   "devDependencies": {
-    "ngraph.fromdot": "0.1.0",
-    "ngraph.svg": "0.0.10",
+    "ngraph.fromdot": "0.1.1",
+    "ngraph.svg": "0.0.11",
     "s.arrow": "^0.1.0",
     "tap": "^0.5.0"
   }
