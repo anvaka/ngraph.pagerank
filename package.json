@@ -1,6 +1,6 @@
 {
   "name": "ngraph.pagerank",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "PageRank calculation for a ngraph.graph",
   "main": "index.js",
   "scripts": {
