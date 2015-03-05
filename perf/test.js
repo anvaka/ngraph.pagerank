@@ -1,8 +1,7 @@
 var g = require('ngraph.generators').grid(100, 100);
-var count = 100;
 var pagerank = require('../');
 var Benchmark = require('benchmark');
-var suite = new Benchmark.Suite;
+var suite = new Benchmark.Suite();
 
 suite.add('Epsilon 1e-7', function() {
   pagerank(g, 0.85, 1e-7);
