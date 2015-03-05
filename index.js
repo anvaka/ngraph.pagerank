@@ -1,68 +1,91 @@
 /**
- * Computes PageRank for a graph.
+ * Computes PageRank for a graph, using typed arrays. This implementation is
+ * optimized for speed. If you want to just read the algorithm, please
+ * follow `lib/easyToRead.js` file
  */
-module.exports = pagerank;
+module.exports = asmpagerank;
 
-function pagerank(graph, internalJumpProbability, epsilon) {
+var elementsPerNode = 5;
+
+function asmpagerank(graph, internalJumpProbability, epsilon) {
   if (typeof epsilon !== 'number') epsilon = 0.005;
   if (typeof internalJumpProbability !== 'number') internalJumpProbability = 0.85;
 
+  var nodesCount = graph.getNodesCount();
+
+  var asmGraph = initializeAsmGraph(graph);
+  var nodes = asmGraph.nodes;
+  var edges = asmGraph.edges;
+  computePageRank(nodes, edges, nodesCount, internalJumpProbability, epsilon);
+  return finalResultsFromAsm(nodes, asmGraph.numberToId);
+}
+
+// we store graph as two arrays:
+//  * nodes - One node of a graph occupies 5 positions in the array:
+//    [pageRank, previous page rank, out degree, in degree, pointer to `edges`]
+//  * edges - This arry holds pointers to neighbors who contributed to a node's
+//  rank. Each element is a pointer to `node` record in the `nodes` array.
+function computePageRank(nodes, edges, nodesCount, internalJumpProbability, epsilon) {
   var done = false; // when done is true, the algorithm is converged
   var distance = 0; // distance between two eigenvectors in adjacent timesteps
   var leakedRank = 0; // we account leaked rank to solve spider traps and dead ends
 
-  var nodesCount = graph.getNodesCount();
-  var nodes = initializeNodes(graph);
   var currentRank;
-  var node;
+  var idx;
 
   do {
     leakedRank = 0;
     for (var j = 0; j < nodesCount; ++j) {
-      node = nodes[j];
+      idx = j * elementsPerNode;
       currentRank = 0;
-      if (node.indegree === 0) {
-        node.rank = 0;
+      var neighborsLength = nodes[idx + 3];
+      if (neighborsLength === 0) { // indegree === 0
+        nodes[idx] = 0; // node.rank
       } else {
-        var neighbors = node.neighbors;
-        for (var i = 0; i < neighbors.length; ++i) {
-          currentRank += neighbors[i].prevRank / neighbors[i].outdegree;
+        var neighborsStart = nodes[idx + 4];
+        for (var i = neighborsStart; i < neighborsStart + neighborsLength; ++i) {
+          var nIdx = edges[i];
+          currentRank += nodes[nIdx + 1] / nodes[nIdx + 2];
+          //currentRank += neighbors[i].prevRank / neighbors[i].outdegree;
         }
-        node.rank = internalJumpProbability * currentRank;
-        leakedRank += node.rank;
+        nodes[idx] = internalJumpProbability * currentRank;
+        leakedRank += nodes[idx];
       }
     }
     // now reinsert the leaked PageRank and compute distance:
     leakedRank = (1 - leakedRank) / nodesCount;
     distance = 0;
     for (j = 0; j < nodesCount; ++j) {
-      node = nodes[j];
-      currentRank = node.rank + leakedRank;
-      distance += Math.abs(currentRank - node.prevRank);
-      node.prevRank = currentRank; // set up for the next iteration
+      idx = j * elementsPerNode;
+      currentRank = nodes[idx] + leakedRank;
+      distance += Math.abs(currentRank - nodes[idx + 1]); // prevRank
+      nodes[idx + 1] = currentRank; // set up for the next iteration prevRank
     }
     done = distance < epsilon;
   } while (!done);
-
-  return finalResults(nodes);
 }
 
-function finalResults(pageRankNodes) {
+function finalResultsFromAsm(nodes, idLookup) {
   var result = Object.create(null);
+  var length = nodes.length / elementsPerNode;
 
-  for (var i = 0; i < pageRankNodes.length; ++i) {
-    var node = pageRankNodes[i];
-    result[node.id] = node.prevRank;
+  for (var i = 0; i < length; ++i) {
+    var idx = i * elementsPerNode;
+    result[idLookup[i]] = nodes[idx + 1]; //.prevRank;
   }
 
   return result;
 }
 
-function initializeNodes(graph) {
+function initializeAsmGraph(graph) {
   var i = 0;
+  var lastEdge = 0;
   var nodesCount = graph.getNodesCount();
+  var edgesCount = graph.getLinksCount();
   var initialRank = (1 / nodesCount);
-  var nodes = new Array(nodesCount);
+  var nodes = new Float64Array(nodesCount * elementsPerNode);
+  var edges = new Float64Array(edgesCount);
+  var numberToId = new Array(nodesCount);
   // we want to use integers for faster iteration during computation. This
   // means we have to map node identifiers to their integers values
   var idToNumber = Object.create(null);
@@ -71,24 +94,43 @@ function initializeNodes(graph) {
   graph.forEachNode(addNode);
   graph.forEachNode(initLinks);
 
-  return nodes;
+  return {
+    nodes: nodes,
+    edges: edges,
+    numberToId: numberToId
+  };
 
   function addNode(node) {
-    nodes[i] = new PageRankNode(initialRank, node.id);
+    var idx = i * elementsPerNode;
+    // initial rank
+    nodes[idx] = initialRank;
+    // prevRank
+    nodes[idx + 1] = initialRank;
+    // outDegree
+    nodes[idx + 2] = 0;
+    // inDegree
+    nodes[idx + 3] = 0;
+    // neighbors array, it's length is the same as inDegree
+    nodes[idx + 4] = -1;
+
     idToNumber[node.id] = i;
+    numberToId[i] = node.id;
     i += 1;
   }
 
   function initLinks(node) {
-    var pageRankNode = nodes[idToNumber[node.id]];
+    var idx = idToNumber[node.id] * elementsPerNode;
     var inDegree = 0;
     var outDegree = 0;
-    var neighbors = pageRankNode.neighbors;
+    var edgeStart = lastEdge;
 
     graph.forEachLinkedNode(node.id, initLink);
 
-    pageRankNode.indegree = inDegree;
-    pageRankNode.outdegree = outDegree;
+    nodes[idx + 2] = outDegree;
+    nodes[idx + 3] = inDegree;
+    if (edgeStart !== lastEdge) {
+      nodes[idx + 4] = edgeStart;
+    }
 
     function initLink(otherNode, link) {
       if (link.fromId === node.id) {
@@ -97,17 +139,9 @@ function initializeNodes(graph) {
       if (link.toId === node.id) {
         inDegree += 1;
         // TODO: this needs to be configurable. E.g. use outdegree
-        neighbors.push(nodes[idToNumber[otherNode.id]]);
+        edges[lastEdge++] = idToNumber[otherNode.id] * elementsPerNode;
       }
     }
   }
 }
 
-function PageRankNode(initialRank, id) {
-  this.id = id;
-  this.rank = initialRank;
-  this.prevRank = initialRank;
-  this.outdegree = 0;
-  this.indegree = 0;
-  this.neighbors = [];
-}
