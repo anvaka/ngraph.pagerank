@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tap test/*.js",
     "start": "browserify demo/index.js > demo/bundle.js",
+    "ffperf": "browserify perf/test.js > perf/spiderTest.js && $SPIDER_MONKEY ./perf/spiderTest.js",
     "perf": "npm version && node perf/test.js"
   },
   "keywords": [

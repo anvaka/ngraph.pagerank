@@ -144,4 +144,3 @@ function initializeAsmGraph(graph) {
     }
   }
 }
-
