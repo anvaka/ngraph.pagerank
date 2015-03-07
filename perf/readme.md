@@ -17,6 +17,10 @@ Fastest is Epsilon 1e-7
 
 ## SpiderMonkey
 
+Version: 39.0a1 (2015-03-05)
+
+```
 Epsilon 1e-7 x 39.40 ops/sec ±1.91% (43 runs sampled)
 Epsilon 1e-10 x 29.43 ops/sec ±2.07% (40 runs sampled)
 Fastest is Epsilon 1e-7
+```
