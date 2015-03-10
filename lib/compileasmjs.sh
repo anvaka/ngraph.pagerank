@@ -1,0 +1,1 @@
+emcc -g ./native.cpp
