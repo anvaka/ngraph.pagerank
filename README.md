@@ -69,7 +69,7 @@ The focus of this module is to be very fast. I tried multiple approaches, includ
 So far approach with typed array gives the fastest results in v8/node.js 0.12:
 `43 ops/sec`. asm.js version is the fastest when executed inside
 spider monkey (firefox) with `50 ops/sec`. Unfortunately asm.js version
-gives terrible results in `iojs 1.5` (around 20 ops/sec), and whle performs at
+gives terrible results in `iojs 1.5` (around 20 ops/sec), and while performs at
 `47 ops/sec` in `node.js 0.12` the deviation is too big (around 7%) to call it
 stable. I'm frankly a little bit lost and not sure why asm.js gives such poor
 results in v8. So currently sticking with approach with typed arrays.
