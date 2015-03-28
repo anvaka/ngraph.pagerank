@@ -91,3 +91,7 @@ npm install ngraph.pagerank
 # license
 
 MIT
+
+# TODO:
+
+Implement topic-specific rank?
