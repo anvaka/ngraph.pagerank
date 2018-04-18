@@ -1,28 +1,19 @@
-# Typed arrays speed
+» npm run perf
 
-## v8
-```
-{ 'ngraph.pagerank': '0.1.1',
-  npm: '2.6.1',
-  ares: '1.10.0-DEV',
-  http_parser: '2.3.0',
-  modules: '43',
-  node: '1.4.3',
-  openssl: '1.0.1k',
-  uv: '1.4.2',
-  v8: '4.1.0.21',
+{ 'ngraph.pagerank': '0.1.4',
+  npm: '3.10.10',
+  ares: '1.10.1-DEV',
+  cldr: '30.0.2',
+  http_parser: '2.7.0',
+  icu: '58.1',
+  modules: '51',
+  node: '7.2.1',
+  openssl: '1.0.2j',
+  tz: '2016g',
+  unicode: '9.0',
+  uv: '1.10.1',
+  v8: '5.4.500.44',
   zlib: '1.2.8' }
-Epsilon 1e-7 x 43.06 ops/sec ±1.92% (56 runs sampled)
-Epsilon 1e-10 x 31.40 ops/sec ±2.41% (54 runs sampled)
+Epsilon 1e-7 x 65.16 ops/sec ±2.36% (67 runs sampled)
+Epsilon 1e-10 x 49.31 ops/sec ±1.40% (63 runs sampled)
 Fastest is Epsilon 1e-7
-```
-
-## SpiderMonkey
-
-Version: 39.0a1 (2015-03-05)
-
-```
-Epsilon 1e-7 x 39.40 ops/sec ±1.91% (43 runs sampled)
-Epsilon 1e-10 x 29.43 ops/sec ±2.07% (40 runs sampled)
-Fastest is Epsilon 1e-7
-```
