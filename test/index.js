@@ -20,7 +20,7 @@ test('it calculates page rank', function(t) {
   var internalJumpProbability = 0.85;
   var rank = pagerank(graph, internalJumpProbability, 0.0001);
 
-  // now just verify that probabilities match precomupted probabilities of the wiki:
+  // now just verify that probabilities match precomputed probabilities of the wiki:
   verify(rank.a, 0.033, t);
   verify(rank.b, 0.384, t);
   verify(rank.c, 0.343, t);
