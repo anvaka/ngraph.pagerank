@@ -31,6 +31,6 @@
     "tap": "^14.1.11"
   },
   "dependencies": {
-    "ngraph.fromdot": "^5.0.0"
+    "ngraph.fromdot": "^6.0.1"
   }
 }
