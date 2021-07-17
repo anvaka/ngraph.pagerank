@@ -51,5 +51,5 @@ test('it works with loops', function(t) {
 });
 
 function verify(nodeRank, expected, t) {
-  t.equals(nodeRank.toFixed(3), expected.toString(), 'Node has expected rank ' + expected);
+  t.equal(nodeRank.toFixed(3), expected.toString(), 'Node has expected rank ' + expected);
 }

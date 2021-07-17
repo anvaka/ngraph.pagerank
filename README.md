@@ -1,4 +1,4 @@
-# ngraph.pagerank [![Build Status](https://travis-ci.org/anvaka/ngraph.pagerank.svg)](https://travis-ci.org/anvaka/ngraph.pagerank)
+# ngraph.pagerank [![build status](https://github.com/anvaka/ngraph.pagerank/actions/workflows/tests.yaml/badge.svg)](https://github.com/anvaka/ngraph.pagerank/actions/workflows/tests.yaml)
 
 PageRank algorithm implementation in JavaScript. This module is part of
 [ngraph](https://github.com/anvaka/ngraph) family.
