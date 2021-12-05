@@ -91,7 +91,7 @@ npm install ngraph.pagerank
 Or download from CDN:
 
 ```
-<script src='https://unpkg.com/ngraph.graph@2.0.0/dist/ngraph.pagerank.min.js'></script>
+<script src='https://unpkg.com/ngraph.pagerank@2.1.0/dist/ngraph.pagerank.min.js'></script>
 ```
 
 If you download from CDN the library will be available under `pageRank` global name.
