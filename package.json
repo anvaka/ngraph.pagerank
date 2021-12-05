@@ -6,8 +6,11 @@
   "bin": {
     "pagrank": "./bin/pagerank.js"
   },
+  "jsdelivr": "dist/ngraph.pagerank.min.js",
+  "unpkg": "dist/ngraph.pagerank.min.js",
   "scripts": {
     "test": "tap --branches=80 --lines=80 --statements=80 --functions=80 test/*.js",
+    "build": "browserify index.js -s pageRank -o dist/ngraph.pagerank.js && uglifyjs dist/ngraph.pagerank.js -o dist/ngraph.pagerank.min.js",
     "start": "browserify demo/index.js > demo/bundle.js",
     "ffperf": "browserify perf/test.js > perf/spiderTest.js && $SPIDER_MONKEY -w ./perf/spiderTest.js",
     "perf": "npm version && node perf/test.js"
@@ -28,7 +31,8 @@
     "ngraph.generators": "^18.0.1",
     "ngraph.svg": "0.0.11",
     "s.arrow": "^0.1.0",
-    "tap": "^15.0.9"
+    "tap": "^15.0.9",
+    "uglify-js": "^3.14.4"
   },
   "dependencies": {
     "ngraph.fromdot": "^6.0.1"

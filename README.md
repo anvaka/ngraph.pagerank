@@ -11,8 +11,8 @@ Let's compute PageRank for a simple graph with two nodes, one edge:
 var graph = require('ngraph.graph')();
 graph.addLink(1, 2);
 
-var pagerank = require('ngraph.pagerank');
-var rank = pagerank(graph);
+var pageRank = require('ngraph.pagerank');
+var rank = pageRank(graph);
 ```
 
 This code will compute PageRank for two nodes:
@@ -30,13 +30,13 @@ The PageRank algorithm allows you to specify a probability at any step that a
 person will continue clicking outgoing links. This probability in some literature
 is called a dumping factor, and is recommended to be set between 0.80 and 0.90.
 
-To configure this probability use the second, optional argument of the `pagerank()`
+To configure this probability use the second, optional argument of the `pageRank()`
 function:
 
 ``` javascript
 // by default this value is 0.85. Bump it to 0.9:
 var internalJumpProbability = 0.90;
-var rank = pagerank(graph, internalJumpProbability);
+var rank = pageRank(graph, internalJumpProbability);
 ```
 
 Current implementation uses approximate solution for eigenvector problem. To
@@ -46,7 +46,7 @@ specify precision level use the last optional argument:
 var internalJumpProbability = 0.85;
 // by default it's set to 0.005, let's increase it:
 var precision = 0.00001;
-var rank = pagerank(graph, internalJumpProbability, precision);
+var rank = pageRank(graph, internalJumpProbability, precision);
 ```
 
 `precision` will affect algorithm performance and serves as an exit criteria:
@@ -55,7 +55,7 @@ var rank = pagerank(graph, internalJumpProbability, precision);
 |r(t) - r(t - 1)| < precision
 ```
 
-Here `r(t)` is eigenvector (or pagerank of a graph) at time step `t`.
+Here `r(t)` is eigenvector (or pageRank of a graph) at time step `t`.
 
 # performance
 
@@ -87,6 +87,14 @@ With [npm](https://npmjs.org) do:
 ```
 npm install ngraph.pagerank
 ```
+
+Or download from CDN:
+
+```
+<script src='https://unpkg.com/ngraph.graph@2.0.0/dist/ngraph.pagerank.min.js'></script>
+```
+
+If you download from CDN the library will be available under `pageRank` global name.
 
 # license
 
